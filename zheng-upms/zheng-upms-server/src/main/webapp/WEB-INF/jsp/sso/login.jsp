@@ -12,12 +12,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>登录页</title>
+    <title>权限管理系统</title>
 
-    <link href="${basePath}/resources/zheng-ui/plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="${basePath}/resources/zheng-ui/plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
-    <link href="${basePath}/resources/zheng-ui/plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
-    <link href="${basePath}/resources/zheng-ui/css/login.css" rel="stylesheet"/>
+    <link href="${basePath}/resources/zheng-admin/plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="${basePath}/resources/zheng-admin/plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
+    <link href="${basePath}/resources/zheng-admin/plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
+    <link href="${basePath}/resources/zheng-admin/plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
+    <link href="${basePath}/resources/zheng-admin/plugins/checkbix/css/checkbix.min.css" rel="stylesheet"/>
+    <link href="${basePath}/resources/zheng-admin/css/login.css" rel="stylesheet"/>
 </head>
 <body>
 <div id="login-window">
@@ -36,64 +38,26 @@
     <div class="clearfix">
     </div>
     <div class="checkbox">
-        <label>
-            <input id="rememberMe" type="checkbox" name="rememberMe">
-            <i class="input-helper"></i>
-            自动登录
-        </label>
+        <input id="rememberMe" type="checkbox" class="checkbix" data-text="自动登录" name="rememberMe">
     </div>
     <a id="login-bt" href="javascript:;" class="waves-effect waves-button waves-float"><i class="zmdi zmdi-arrow-forward"></i></a>
 </div>
-<script src="${basePath}/resources/zheng-ui/plugins/jquery.1.12.4.min.js"></script>
-<script src="${basePath}/resources/zheng-ui/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
-<script src="${basePath}/resources/zheng-ui/plugins/waves-0.7.5/waves.min.js"></script>
-
-<script src="${basePath}/resources/zheng-ui/js/login.js"></script>
+<script src="${basePath}/resources/zheng-admin/plugins/jquery.1.12.4.min.js"></script>
+<script src="${basePath}/resources/zheng-admin/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+<script src="${basePath}/resources/zheng-admin/plugins/waves-0.7.5/waves.min.js"></script>
+<script src="${basePath}/resources/zheng-admin/plugins/checkbix/js/checkbix.min.js"></script>
+<script>var BASE_PATH = '${basePath}';</script>
+<script>var BACK_URL = '${param.backurl}';</script>
+<script src="${basePath}/resources/zheng-admin/js/login.js"></script>
 <script>
-    $(function() {
-        // 点击登录按钮
-        $('#login-bt').click(function() {
-            login();
-        });
-        // 回车事件
-        $('#username, #password').keypress(function (event) {
-            if (13 == event.keyCode) {
-                login();
-            }
-        });
-    });
-    // 登录
-    function login() {
-        $.ajax({
-            url: '${basePath}/sso/login',
-            type: 'POST',
-            data: {
-                username: $('#username').val(),
-                password: $('#password').val(),
-                rememberMe: $('#rememberMe').is(':checked'),
-                backurl: '${param.backurl}'
-            },
-            beforeSend: function() {
-
-            },
-            success: function(json){
-                if (json.code == 1) {
-                    location.href = json.data;
-                } else {
-                    alert(json.data);
-                    if (10101 == json.code) {
-                        $('#username').focus();
-                    }
-                    if (10102 == json.code) {
-                        $('#password').focus();
-                    }
-                }
-            },
-            error: function(error){
-                console.log(error);
-            }
-        });
-    }
+<c:if test="${param.forceLogout == 1}">
+alert('您已被强制下线！');
+top.location.href = '${basePath}/sso/login';
+</c:if>
+//解决iframe下系统超时无法跳出iframe框架的问题
+if (window != top){
+    top.location.href = location.href;
+}
 </script>
 </body>
 </html>

@@ -21,8 +21,20 @@ public class UpmsApiServiceMock implements UpmsApiService {
     }
 
     @Override
+    public List<UpmsPermission> selectUpmsPermissionByUpmsUserIdByCache(Integer upmsUserId) {
+        _log.info("UpmsApiServiceMock => selectUpmsPermissionByUpmsUserIdByCache");
+        return null;
+    }
+
+    @Override
     public List<UpmsRole> selectUpmsRoleByUpmsUserId(Integer upmsUserId) {
         _log.info("UpmsApiServiceMock => selectUpmsRoleByUpmsUserId");
+        return null;
+    }
+
+    @Override
+    public List<UpmsRole> selectUpmsRoleByUpmsUserIdByCache(Integer upmsUserId) {
+        _log.info("UpmsApiServiceMock => selectUpmsRoleByUpmsUserIdByCache");
         return null;
     }
 
@@ -48,6 +60,18 @@ public class UpmsApiServiceMock implements UpmsApiService {
     public List<UpmsOrganization> selectUpmsOrganizationByExample(UpmsOrganizationExample upmsOrganizationExample) {
         _log.info("UpmsApiServiceMock => selectUpmsOrganizationByExample");
         return null;
+    }
+
+    @Override
+    public UpmsUser selectUpmsUserByUsername(String username) {
+        _log.info("UpmsApiServiceMock => selectUpmsUserByUsername");
+        return null;
+    }
+
+    @Override
+    public int insertUpmsLogSelective(UpmsLog record) {
+        _log.info("UpmsApiServiceMock => insertSelective");
+        return 0;
     }
 
 }

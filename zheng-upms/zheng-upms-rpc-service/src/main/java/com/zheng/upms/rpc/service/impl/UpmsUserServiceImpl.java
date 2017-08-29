@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 用户service实现
- * Created by shuzheng on 2016/01/19.
- */
+* UpmsUserService实现
+* Created by shuzheng on 2017/3/20.
+*/
 @Service
 @Transactional
 @BaseService
@@ -25,5 +25,18 @@ public class UpmsUserServiceImpl extends BaseServiceImpl<UpmsUserMapper, UpmsUse
 
     @Autowired
     UpmsUserMapper upmsUserMapper;
+
+    @Override
+    public UpmsUser createUser(UpmsUser upmsUser) {
+        UpmsUserExample upmsUserExample = new UpmsUserExample();
+        upmsUserExample.createCriteria()
+                .andUsernameEqualTo(upmsUser.getUsername());
+        long count = upmsUserMapper.countByExample(upmsUserExample);
+        if (count > 0) {
+            return null;
+        }
+        upmsUserMapper.insert(upmsUser);
+        return upmsUser;
+    }
 
 }

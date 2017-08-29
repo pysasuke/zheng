@@ -5,10 +5,17 @@ import com.zheng.upms.dao.model.UpmsUserOrganization;
 import com.zheng.upms.dao.model.UpmsUserOrganizationExample;
 
 /**
- * 用户组织service接口
- * Created by shuzheng on 2017/2/26.
- */
+* UpmsUserOrganizationService接口
+* Created by shuzheng on 2017/3/20.
+*/
 public interface UpmsUserOrganizationService extends BaseService<UpmsUserOrganization, UpmsUserOrganizationExample> {
 
+    /**
+     * 用户组织
+     * @param organizationIds 组织ids
+     * @param id 用户id
+     * @return
+     */
+    int organization(String[] organizationIds, int id);
 
 }

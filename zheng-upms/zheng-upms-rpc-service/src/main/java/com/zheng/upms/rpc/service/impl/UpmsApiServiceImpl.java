@@ -3,16 +3,18 @@ package com.zheng.upms.rpc.service.impl;
 import com.zheng.upms.dao.mapper.*;
 import com.zheng.upms.dao.model.*;
 import com.zheng.upms.rpc.api.UpmsApiService;
+import com.zheng.upms.rpc.mapper.UpmsApiMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
- * 用户service实现
+ * UpmsApiService实现
  * Created by shuzheng on 2016/01/19.
  */
 @Service
@@ -39,6 +41,9 @@ public class UpmsApiServiceImpl implements UpmsApiService {
     @Autowired
     UpmsOrganizationMapper upmsOrganizationMapper;
 
+    @Autowired
+    UpmsLogMapper upmsLogMapper;
+
     /**
      * 根据用户id获取所拥有的权限
      * @param upmsUserId
@@ -57,6 +62,17 @@ public class UpmsApiServiceImpl implements UpmsApiService {
     }
 
     /**
+     * 根据用户id获取所拥有的权限
+     * @param upmsUserId
+     * @return
+     */
+    @Override
+    @Cacheable(value = "zheng-upms-rpc-service-ehcache", key = "'selectUpmsPermissionByUpmsUserId_' + #upmsUserId")
+    public List<UpmsPermission> selectUpmsPermissionByUpmsUserIdByCache(Integer upmsUserId) {
+        return selectUpmsPermissionByUpmsUserId(upmsUserId);
+    }
+
+    /**
      * 根据用户id获取所属的角色
      * @param upmsUserId
      * @return
@@ -71,6 +87,17 @@ public class UpmsApiServiceImpl implements UpmsApiService {
         }
         List<UpmsRole> upmsRoles = upmsApiMapper.selectUpmsRoleByUpmsUserId(upmsUserId);
         return upmsRoles;
+    }
+
+    /**
+     * 根据用户id获取所属的角色
+     * @param upmsUserId
+     * @return
+     */
+    @Override
+    @Cacheable(value = "zheng-upms-rpc-service-ehcache", key = "'selectUpmsRoleByUpmsUserId_' + #upmsUserId")
+    public List<UpmsRole> selectUpmsRoleByUpmsUserIdByCache(Integer upmsUserId) {
+        return selectUpmsRoleByUpmsUserId(upmsUserId);
     }
 
     /**
@@ -119,6 +146,33 @@ public class UpmsApiServiceImpl implements UpmsApiService {
     @Override
     public List<UpmsOrganization> selectUpmsOrganizationByExample(UpmsOrganizationExample upmsOrganizationExample) {
         return upmsOrganizationMapper.selectByExample(upmsOrganizationExample);
+    }
+
+    /**
+     * 根据username获取UpmsUser
+     * @param username
+     * @return
+     */
+    @Override
+    public UpmsUser selectUpmsUserByUsername(String username) {
+        UpmsUserExample upmsUserExample = new UpmsUserExample();
+        upmsUserExample.createCriteria()
+                .andUsernameEqualTo(username);
+        List<UpmsUser> upmsUsers = upmsUserMapper.selectByExample(upmsUserExample);
+        if (null != upmsUsers && upmsUsers.size() > 0) {
+            return upmsUsers.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 写入操作日志
+     * @param record
+     * @return
+     */
+    @Override
+    public int insertUpmsLogSelective(UpmsLog record) {
+        return upmsLogMapper.insertSelective(record);
     }
 
 }

@@ -18,11 +18,25 @@ public interface UpmsApiService {
     List<UpmsPermission> selectUpmsPermissionByUpmsUserId(Integer upmsUserId);
 
     /**
+     * 根据用户id获取所拥有的权限(用户和角色权限合集)
+     * @param upmsUserId
+     * @return
+     */
+    List<UpmsPermission> selectUpmsPermissionByUpmsUserIdByCache(Integer upmsUserId);
+
+    /**
      * 根据用户id获取所属的角色
      * @param upmsUserId
      * @return
      */
     List<UpmsRole> selectUpmsRoleByUpmsUserId(Integer upmsUserId);
+
+    /**
+     * 根据用户id获取所属的角色
+     * @param upmsUserId
+     * @return
+     */
+    List<UpmsRole> selectUpmsRoleByUpmsUserIdByCache(Integer upmsUserId);
 
     /**
      * 根据角色id获取所拥有的权限
@@ -51,5 +65,19 @@ public interface UpmsApiService {
      * @return
      */
     List<UpmsOrganization> selectUpmsOrganizationByExample(UpmsOrganizationExample upmsOrganizationExample);
+
+    /**
+     * 根据username获取UpmsUser
+     * @param username
+     * @return
+     */
+    UpmsUser selectUpmsUserByUsername(String username);
+
+    /**
+     * 写入操作日志
+     * @param record
+     * @return
+     */
+    int insertUpmsLogSelective(UpmsLog record);
 
 }
